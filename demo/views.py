@@ -2,9 +2,11 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.response import Response
+from rest_framework.filters import SearchFilter
 from .serializers import AuthorSerializer, BookSerializer
 from .models import Author, Book
 from .filters import BookFilter
+from .permissions import IsAdminOrReadOnly
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 
@@ -65,10 +67,22 @@ class AuthorView(APIView):
 class AuthorViewSet(ModelViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
+    filter_backends = [SearchFilter]
+    search_fields = ['name', 'bio', 'languages__name']
 
 
 class BookViewSet(ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
     filterset_class = BookFilter
+    permission_classes = [IsAdminOrReadOnly]
+
+
+
+#write a book review class so that we can track the reviews of a book given by a user
+#write a viewset for the book review class
+#write a serializer for the book review class
+#write a url for the book review class
+#write a filter for the book review class
+#write a permission for the book review class
